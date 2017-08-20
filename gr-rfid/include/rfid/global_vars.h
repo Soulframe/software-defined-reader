@@ -27,54 +27,48 @@
 
 namespace gr {
   namespace rfid {
-
-    enum STATUS               {RUNNING, TERMINATED};
-    enum GEN2_LOGIC_STATUS  {SEND_QUERY, SEND_ACK, SEND_QUERY_REP, IDLE, SEND_CW, START, SEND_QUERY_ADJUST, SEND_NAK_QR, SEND_NAK_Q, POWER_DOWN}; 
+    // system status
+    enum STATUS             {RUNNING, TERMINATED};
+    // Gate Moulde Status
     enum GATE_STATUS        {GATE_OPEN, GATE_CLOSED, GATE_SEEK_RN16, GATE_SEEK_EPC};  
     enum DECODER_STATUS     {DECODER_DECODE_RN16, DECODER_DECODE_EPC};
-    
+    // Reader Command Status
+    enum GEN2_LOGIC_STATUS  {SEND_SELECT, 
+          SEND_QUERY, SEND_QUERY_REP, SEND_QUERY_ADJUST, SEND_ACK, 
+          IDLE, START, POWER_DOWN,
+          SEND_NAK_QR, SEND_NAK_Q, SEND_CW}; 
+    // reader decoding status
     struct READER_STATS
     {
       int n_queries_sent;
-
       int cur_inventory_round;
       int cur_slot_number;
-
       int max_slot_number;
       int max_inventory_round;
-
       int n_epc_correct;
-      
-
-      std::vector<int>  unique_tags_round;
-       std::map<int,int> tag_reads;    
-
+      std::vector<int> unique_tags_round;
+      std::map<int,int> tag_reads;    
       struct timeval start, end; 
     };
-
+    // top status
     struct READER_STATE
     {
-      STATUS               status;
+      STATUS              status;
       GEN2_LOGIC_STATUS   gen2_logic_status;
       GATE_STATUS         gate_status;
-      DECODER_STATUS       decoder_status;
-      READER_STATS         reader_stats;
-
-
-
+      DECODER_STATUS      decoder_status;
+      READER_STATS        reader_stats;
       std::vector<float> magn_squared_samples; // used for sync
       int n_samples_to_ungate; // used by the GATE and DECODER block
     };
 
     // CONSTANTS (READER CONFIGURATION)
-
     // Fixed number of slots (2^(FIXED_Q))  
+    // Waiting to be upgraded
     const int FIXED_Q              = 0;
-
     // Termination criteria
     // const int MAX_INVENTORY_ROUND = 50;
     const int MAX_NUM_QUERIES     = 1000;     // Stop after MAX_NUM_QUERIES have been sent
-
     // valid values for Q
     const int Q_VALUE [16][4] =  
     {
@@ -83,22 +77,28 @@ namespace gr {
         {1,0,0,0}, {1,0,0,1}, {1,0,1,0}, {1,0,1,1},
         {1,1,0,0}, {1,1,0,1}, {1,1,1,0}, {1,1,1,1}
     };  
-
     const bool P_DOWN = false;
-
     // Duration in us
-    const int CW_D         = 250;    // Carrier wave
-    const int P_DOWN_D     = 2000;    // power down
-    const int T1_D         = 240;    // Time from Interrogator transmission to Tag response (250 us)
-    const int T2_D         = 480;    // Time from Tag response to Interrogator transmission. Max value = 20.0 * T_tag = 500us 
-    const int PW_D         = 12;      // Half Tari 
-    const int DELIM_D       = 12;      // A preamble shall comprise a fixed-length start delimiter 12.5us +/-5%
-    const int TRCAL_D     = 200;    // BLF = DR/TRCAL => 40e3 = 8/TRCAL => TRCAL = 200us
-    const int RTCAL_D     = 72;      // 6*PW = 72us
+    const int P_DOWN_D   = 2000;   // power down
+    const int CW_D       = 250;    // Carrier wave
+    const int Tari       = 24;     // Tari, time data 0
+    const int PW_D       = Tari/2;     // Half Tari 
+    // this is for the backscatter link frequency
+    // tag calibrate the reader
+    // BLF = DR/TRCAL => 40e3 = 8/TRCAL => TRCAL = 200us
+    const int TRCAL_D    = 200;
+    // reader calibrate the tag  
+    // 6*PW = 72us  
+    const int RTCAL_D    = 3*Tari;     
+    const int T1_D       = 240;    // Time from Interrogator transmission to Tag response (250 us)
+    const int T2_D       = 480;    // Time from Tag response to Interrogator transmission. Max value = 20.0 * T_tag = 500us 
+    const int T3_D       = 0;      // the time reader has to wait after T1, for a new command
+    const int T4_D       = 2*RTCAL_D;  //min time between two commands
+    
+    const int DELIM_D    = 12;     // A preamble shall comprise a fixed-length start delimiter 12.5us +/-5%
 
     const int NUM_PULSES_COMMAND = 5;       // Number of pulses to detect a reader command
-    const int NUMBER_UNIQUE_TAGS = 100;      // Stop after NUMBER_UNIQUE_TAGS have been read 
-
+    const int NUMBER_UNIQUE_TAGS = 100;     // Stop after NUMBER_UNIQUE_TAGS have been read 
 
     // Number of bits
     const int PILOT_TONE          = 12;  // Optional
@@ -120,7 +120,10 @@ namespace gr {
     const int TREXT         = 0;
     const int DR            = 0;
 
-
+    // SEND CODE
+    const int SEND_CODE[4] = {1,0,1,0};
+    const int SEND_Target[3]={1,0,0};
+    // NAK CODE
     const int NAK_CODE[8]   = {1,1,0,0,0,0,0,0};
 
     // ACK command

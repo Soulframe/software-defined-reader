@@ -49,9 +49,7 @@ namespace gr {
       GR_LOG_INFO(d_logger, "Block initialized");
 
       sample_d = 1.0/dac_rate * pow(10,6);
-
       // Number of samples for transmitting
-
       n_data0_s = 2 * PW_D / sample_d;
       n_data1_s = 4 * PW_D / sample_d;
       n_pw_s    = PW_D    / sample_d;
@@ -70,7 +68,7 @@ namespace gr {
       n_cwack_s     = (3*T1_D+T2_D+EPC_D)/sample_d;    //EPC   if it is longer than nominal it wont cause tags to change inventoried flag
       n_p_down_s     = (P_DOWN_D)/sample_d;  
 
-      p_down.resize(n_p_down_s);        // Power down samples
+      p_down.resize(n_p_down_s);          // Power down samples
       cw_query.resize(n_cwquery_s);      // Sent after query/query rep
       cw_ack.resize(n_cwack_s);          // Sent after ack
 
@@ -89,9 +87,9 @@ namespace gr {
       trcal.resize(n_trcal_s);
 
       // Fill vectors with data
-      std::fill_n(data_0.begin(), data_0.size()/2, 1);
-      std::fill_n(data_1.begin(), 3*data_1.size()/4, 1);
-      std::fill_n(cw.begin(), cw.size(), 1);
+      std::fill_n(data_0.begin(), data_0.size()/2, 1);  //data_0
+      std::fill_n(data_1.begin(), 3*data_1.size()/4, 1);  //data_1
+      std::fill_n(cw.begin(), cw.size(), 1);  //norm cw
       std::fill_n(rtcal.begin(), rtcal.size() - n_pw_s, 1); // RTcal
       std::fill_n(trcal.begin(), trcal.size() - n_pw_s, 1); // TRcal
 
@@ -124,8 +122,26 @@ namespace gr {
       nak.insert( nak.end(), data_0.begin(), data_0.end() );
       nak.insert( nak.end(), data_0.begin(), data_0.end() );
 
+      // generate the select ,query, query_adjust command
+      gen_select_bits();
       gen_query_bits();
       gen_query_adjust_bits();
+    }
+
+    //generate select command
+    void reader_impl::gen_select_bits(){
+      select_bits.resize(0);
+      // command code, target,action,membank,pointer,length,mask,truncate,
+      select_bits.insert(select_bits.end(),&SELECT_CODE[0],&SELECT_CODE[4]);
+      select_bits.insert(select_bits.end(),&SELECT_Target[0],&SELECT_Target[3]);
+      select_bits.insert(select_bits.end(),&SELECT_ACTION[0],&SELECT_ACTION[3]);
+      select_bits.insert(select_bits.end(),&SELECT_MEMBANK[0],&SELECT_MEMBANK[2]);
+      select_bits.insert(select_bits.end(),&SELECT_POINTER[0],&SELECT_POINTER[2]);
+      select_bits.insert(select_bits.end(),&SELECT_MASK[0],&SELECT_MASK[2]);
+      select_bits.insert(select_bits.end(),&SELECT_LENGTH[0],&SELECT_LENGTH[8]);
+      select_bits.insert(select_bits.end(),&SELECT_TRUNCATE[0],&SELECT_TRUNCATE[1]);
+      // add crc-16
+      crc16_append(select_bits);
     }
 
     void reader_impl::gen_query_bits()
@@ -142,7 +158,7 @@ namespace gr {
       query_bits.push_back(TARGET);
     
       query_bits.insert(query_bits.end(), &Q_VALUE[FIXED_Q][0], &Q_VALUE[FIXED_Q][4]);
-      crc_append(query_bits);
+      crc5_append(query_bits);
     }
 
 
@@ -203,187 +219,42 @@ namespace gr {
                        gr_vector_const_void_star &input_items,
                        gr_vector_void_star &output_items)
     {
-
       const float *in = (const float *) input_items[0];
       float *out =  (float*) output_items[0];
-      std::vector<float> out_message; 
-      int n_output;
       int consumed = 0;
       int written = 0;
-
       consumed = ninput_items[0];
-  
-      switch (reader_state->gen2_logic_status)
-      {
-        case START:
-          GR_LOG_INFO(d_debug_logger, "START");
+      switch(reader_state->gen2_logic_status){
+        
 
-          memcpy(&out[written], &cw_ack[0], sizeof(float) * cw_ack.size() );
-          written += cw_ack.size();
-          reader_state->gen2_logic_status = SEND_QUERY;    
-          break;
-
-        case POWER_DOWN:
-          GR_LOG_INFO(d_debug_logger, "POWER DOWN");
-          memcpy(&out[written], &p_down[0], sizeof(float) * p_down.size() );
-          written += p_down.size();
-          reader_state->gen2_logic_status = START;    
-          break;
-
-        case SEND_NAK_QR:
-          GR_LOG_INFO(d_debug_logger, "SEND NAK");
-          memcpy(&out[written], &nak[0], sizeof(float) * nak.size() );
-          written += nak.size();
-          memcpy(&out[written], &cw[0], sizeof(float) * cw.size() );
-          written+=cw.size();
-          reader_state->gen2_logic_status = SEND_QUERY_REP;    
-          break;
-
-        case SEND_NAK_Q:
-          GR_LOG_INFO(d_debug_logger, "SEND NAK");
-          memcpy(&out[written], &nak[0], sizeof(float) * nak.size() );
-          written += nak.size();
-          memcpy(&out[written], &cw[0], sizeof(float) * cw.size() );
-          written+=cw.size();
-          reader_state->gen2_logic_status = SEND_QUERY;    
-          break;
-
-        case SEND_QUERY:
-
-          /*if (reader_state->reader_stats.n_queries_sent % 500 == 0)
-          {
-            std::cout << "Running " << std::endl;
-          }*/
-
-          GR_LOG_INFO(d_debug_logger, "QUERY");
-          GR_LOG_INFO(d_debug_logger, "INVENTORY ROUND : " << reader_state->reader_stats.cur_inventory_round << " SLOT NUMBER : " << reader_state->reader_stats.cur_slot_number);
-
-          reader_state->reader_stats.n_queries_sent +=1;  
-          // Controls the other two blocks
-          reader_state->decoder_status = DECODER_DECODE_RN16;
-          reader_state->gate_status    = GATE_SEEK_RN16;
-
-          memcpy(&out[written], &preamble[0], sizeof(float) * preamble.size() );
-          written+=preamble.size();
-   
-          for(int i = 0; i < query_bits.size(); i++)
-          {
-            if(query_bits[i] == 1)
-            {
-              memcpy(&out[written], &data_1[0], sizeof(float) * data_1.size() );
-              written+=data_1.size();
-            }
-            else
-            {
-              memcpy(&out[written], &data_0[0], sizeof(float) * data_0.size() );
-              written+=data_0.size();
-            }
-          }
-          // Send CW for RN16
-          memcpy(&out[written], &cw_query[0], sizeof(float) * cw_query.size() );
-          written+=cw_query.size();
-
-          // Return to IDLE
-          reader_state->gen2_logic_status = IDLE;      
-          break;
-
-        case SEND_ACK:
-          GR_LOG_INFO(d_debug_logger, "SEND ACK");
-          if (ninput_items[0] == RN16_BITS - 1)
-          {
-            // Controls the other two blocks
-            reader_state->decoder_status = DECODER_DECODE_EPC;
-            reader_state->gate_status    = GATE_SEEK_EPC;
-
-            gen_ack_bits(in);
-          
-            // Send FrameSync
-            memcpy(&out[written], &frame_sync[0], sizeof(float) * frame_sync.size() );
-            written += frame_sync.size();
-
-            for(int i = 0; i < ack_bits.size(); i++)
-            {
-              if(ack_bits[i] == 1)
-              {
-                memcpy(&out[written], &data_1[0], sizeof(float) * data_1.size() );
-                written += data_1.size();
-              }
-              else  
-              {
-                memcpy(&out[written], &data_0[0], sizeof(float) * data_0.size() );
-                written += data_0.size();
-              }
-            }
-             consumed = ninput_items[0];
-            reader_state->gen2_logic_status = SEND_CW; 
-          }
-          break;
-
-        case SEND_CW:
-          GR_LOG_INFO(d_debug_logger, "SEND CW");
-          memcpy(&out[written], &cw_ack[0], sizeof(float) * cw_ack.size() );
-          written += cw_ack.size();
-          reader_state->gen2_logic_status = IDLE;      // Return to IDLE
-          break;
-
-        case SEND_QUERY_REP:
-          GR_LOG_INFO(d_debug_logger, "SEND QUERY_REP");
-          GR_LOG_INFO(d_debug_logger, "INVENTORY ROUND : " << reader_state->reader_stats.cur_inventory_round << " SLOT NUMBER : " << reader_state->reader_stats.cur_slot_number);
-          // Controls the other two blocks
-          reader_state->decoder_status = DECODER_DECODE_RN16;
-          reader_state->gate_status    = GATE_SEEK_RN16;
-          reader_state->reader_stats.n_queries_sent +=1;  
-
-          memcpy(&out[written], &query_rep[0], sizeof(float) * query_rep.size() );
-          written += query_rep.size();
-
-          memcpy(&out[written], &cw_query[0], sizeof(float) * cw_query.size());
-          written+=cw_query.size();
-
-          reader_state->gen2_logic_status = IDLE;    // Return to IDLE
-          break;
-      
-        case SEND_QUERY_ADJUST:
-          GR_LOG_INFO(d_debug_logger, "SEND QUERY_ADJUST");
-          // Controls the other two blocks
-          reader_state->decoder_status = DECODER_DECODE_RN16;
-          reader_state->gate_status    = GATE_SEEK_RN16;
-          reader_state->reader_stats.n_queries_sent +=1;  
-
-          memcpy(&out[written], &frame_sync[0], sizeof(float) * frame_sync.size() );
-          written += frame_sync.size();
-
-          for(int i = 0; i < query_adjust_bits.size(); i++)
-          {
-            if(query_adjust_bits[i] == 1)
-            {
-              memcpy(&out[written], &data_1[0], sizeof(float) * data_1.size() );
-              written+=data_1.size();
-            }
-            else
-            {
-              memcpy(&out[written], &data_0[0], sizeof(float) * data_0.size() );
-              written+=data_0.size();
-            }
-          }
-          memcpy(&out[written], &cw_query[0], sizeof(float) * cw_query.size());
-          written+=cw_query.size();
-          reader_state->gen2_logic_status = IDLE;    // Return to IDLE
-          break;
-
-        default:
-          // IDLE
-          break;
       }
       consume_each (consumed);
       return  written;
     }
-
+    /* Function for generating the CRC16*/
+    void reader_impl::crc16_append(std::vector<float> & q){
+      unsigned short crc = 0xFFFF;
+      for(int i = 0;i<q.size();i++){
+          unsigned char xx = (unsigned char)(q[i])-2512;
+          unsigned char x = crc>>8^xx;
+          x ^= x>>4;
+          crc = (crc << 8) ^ ((unsigned short)(x << 12)) ^ ((unsigned short)(x <<5)) ^ ((unsigned short)x);
+      }
+      // unsigned char to vector
+      vector<int>temp;
+      for (int j = 0; j <16; ++j) {
+          temp.push_back(crc%2);
+          crc = crc/2;
+      }
+      // reverse to append
+      for (int j = 15; j >=0; j--) {
+          q.push_back(temp[j]);
+      }
+    }
     /* Function adapted from https://www.cgran.org/wiki/Gen2 */
-    void reader_impl::crc_append(std::vector<float> & q)
-    {
-       int crc[] = {1,0,0,1,0};
-
+    void reader_impl::crc5_append(std::vector<float> & q){
+      
+      int crc[] = {1,0,0,1,0};
       for(int i = 0; i < 17; i++)
       {
         int tmp[] = {0,0,0,0,0};
