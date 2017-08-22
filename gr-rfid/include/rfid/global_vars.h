@@ -120,9 +120,16 @@ namespace gr {
     const int TREXT         = 0;
     const int DR            = 0;
 
-    // SEND CODE
-    const int SEND_CODE[4] = {1,0,1,0};
-    const int SEND_Target[3]={1,0,0};
+    // SELECT CODE
+    const int SELECT_CODE[4] = {1,0,1,0};
+    const int SELECT_TARGET[3]={1,0,0};
+    const int SELECT_ACTION[3]={0,1,0};
+    const int SELECT_MEMBANK[2]={0,1};
+    const int SELECT_POINTER[8]={0,0,0,0,0,0,0,1};  //EBV8 for EPC
+    const int SELECT_MASK[2]={0,0};
+    const int SELECT_LENGTH[8]={0,0,0,0,0,0,1,0};
+    const int SELECT_TRUNCATE[1]=0;
+
     // NAK CODE
     const int NAK_CODE[8]   = {1,1,0,0,0,0,0,0};
 
