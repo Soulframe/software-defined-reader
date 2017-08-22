@@ -34,7 +34,8 @@ namespace gr {
       int s_rate, d_rate,  n_cwquery_s,  n_cwack_s,n_p_down_s;
       float sample_d, n_data0_s, n_data1_s, n_cw_s, n_pw_s, n_delim_s, n_trcal_s;
       std::vector<float> data_0, data_1, cw, cw_ack, cw_query, delim, frame_sync, preamble, rtcal, trcal, query_bits, ack_bits, query_rep,nak, query_adjust_bits,p_down;
-      std::vector<float> select;
+      std::vector<float> select_bits;
+      int n_cw_T4;
       int q_change; // 0-> increment, 1-> unchanged, 2-> decrement
       void gen_query_adjust_bits();
       void crc5_append(std::vector<float> & q);
@@ -42,7 +43,7 @@ namespace gr {
       void gen_query_bits();
       void gen_ack_bits(const float * in);
       void gen_select_bits();
-
+      void send_command_phy();
     public:
       void print_results();
       reader_impl(int sample_rate, int dac_rate);
