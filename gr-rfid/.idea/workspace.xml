@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
+    <generated>
+      <config projectName="gr-rfid" targetName="pygen_apps_9a6dd" />
+      <config projectName="gr-rfid" targetName="_rfid_swig_doc_tag" />
+      <config projectName="gr-rfid" targetName="pygen_swig_2ef41" />
+      <config projectName="gr-rfid" targetName="rfid_swig_swig_2d0df" />
+      <config projectName="gr-rfid" targetName="pygen_python_50e41" />
+      <config projectName="gr-rfid" targetName="uninstall" />
+      <config projectName="gr-rfid" targetName="doxygen_target" />
+      <config projectName="gr-rfid" targetName="_rfid_swig" />
+      <config projectName="gr-rfid" targetName="rfid_swig_swig_doc" />
+      <config projectName="gr-rfid" targetName="test-rfid" />
+      <config projectName="gr-rfid" targetName="gnuradio-rfid" />
+      <config projectName="gr-rfid" targetName="_rfid_swig_swig_tag" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cd972b90-f7b8-4ba5-96cf-ab6c865d6955" name="Default" comment="" />
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="global_vars.h" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/include/rfid/global_vars.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1206">
+              <caret line="71" column="26" lean-forward="false" selection-start-line="71" selection-start-column="26" selection-end-line="71" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="reader_impl.cc" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/reader_impl.cc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="161" column="74" lean-forward="false" selection-start-line="161" selection-start-column="74" selection-end-line="161" selection-end-column="74" />
+              <folding>
+                <element signature="e#815#834#0" expanded="true" />
+                <element signature="e#843#877#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="reader_impl.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/reader_impl.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-111">
+              <caret line="42" column="52" lean-forward="false" selection-start-line="42" selection-start-column="52" selection-end-line="42" selection-end-column="52" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>fram</find>
+    </findStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/lib/reader_impl.h" />
+        <option value="$PROJECT_DIR$/lib/reader_impl.cc" />
+        <option value="$PROJECT_DIR$/include/rfid/global_vars.h" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="78" />
+    <option name="y" value="24" />
+    <option name="width" value="1281" />
+    <option name="height" value="704" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="gr-rfid" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
+              <item name="gr-rfid" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="gr-rfid" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
+              <item name="gr-rfid" type="462c0819:PsiDirectoryNode" />
+              <item name="include" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="gr-rfid" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
+              <item name="gr-rfid" type="462c0819:PsiDirectoryNode" />
+              <item name="include" type="462c0819:PsiDirectoryNode" />
+              <item name="rfid" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="gr-rfid" type="dad4c3:CidrFilesViewHelper$MyProjectTreeStructure$1" />
+              <item name="gr-rfid" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.test-rfid">
+    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" EXPLICIT_BUILD_TARGET_NAME="all">
+      <envs />
+    </configuration>
+    <configuration name="_rfid_swig" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="_rfid_swig" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="_rfid_swig_doc_tag" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="_rfid_swig_doc_tag" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="gr-rfid" RUN_TARGET_NAME="_rfid_swig_doc_tag">
+      <envs />
+    </configuration>
+    <configuration name="_rfid_swig_swig_tag" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="_rfid_swig_swig_tag" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="gr-rfid" RUN_TARGET_NAME="_rfid_swig_swig_tag">
+      <envs />
+    </configuration>
+    <configuration name="doxygen_target" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="doxygen_target" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="gnuradio-rfid" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="gnuradio-rfid" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="pygen_apps_9a6dd" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="pygen_apps_9a6dd" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="pygen_python_50e41" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="pygen_python_50e41" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="pygen_swig_2ef41" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="pygen_swig_2ef41" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="rfid_swig_swig_2d0df" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="rfid_swig_swig_2d0df" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="gr-rfid" RUN_TARGET_NAME="rfid_swig_swig_2d0df">
+      <envs />
+    </configuration>
+    <configuration name="rfid_swig_swig_doc" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="rfid_swig_swig_doc" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <configuration name="test-rfid" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="test-rfid" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="gr-rfid" RUN_TARGET_NAME="test-rfid">
+      <envs />
+    </configuration>
+    <configuration name="uninstall" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="gr-rfid" TARGET_NAME="uninstall" CONFIG_NAME="Debug">
+      <envs />
+    </configuration>
+    <list size="13">
+      <item index="0" class="java.lang.String" itemvalue="Application.Build All" />
+      <item index="1" class="java.lang.String" itemvalue="Application.uninstall" />
+      <item index="2" class="java.lang.String" itemvalue="Application.pygen_apps_9a6dd" />
+      <item index="3" class="java.lang.String" itemvalue="Application.doxygen_target" />
+      <item index="4" class="java.lang.String" itemvalue="Application.gnuradio-rfid" />
+      <item index="5" class="java.lang.String" itemvalue="Application.test-rfid" />
+      <item index="6" class="java.lang.String" itemvalue="Application.pygen_python_50e41" />
+      <item index="7" class="java.lang.String" itemvalue="Application._rfid_swig" />
+      <item index="8" class="java.lang.String" itemvalue="Application._rfid_swig_doc_tag" />
+      <item index="9" class="java.lang.String" itemvalue="Application._rfid_swig_swig_tag" />
+      <item index="10" class="java.lang.String" itemvalue="Application.pygen_swig_2ef41" />
+      <item index="11" class="java.lang.String" itemvalue="Application.rfid_swig_swig_2d0df" />
+      <item index="12" class="java.lang.String" itemvalue="Application.rfid_swig_swig_doc" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cd972b90-f7b8-4ba5-96cf-ab6c865d6955" name="Default" comment="" />
+      <created>1503842166343</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1503842166343</updated>
+      <workItem from="1503842168248" duration="13342000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="13342000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20676403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934132" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32934132" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/lib/tag_decoder_impl.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5135">
+          <caret line="350" column="50" lean-forward="false" selection-start-line="350" selection-start-column="42" selection-end-line="350" selection-end-column="50" />
+          <folding>
+            <element signature="e#815#834#0" expanded="false" />
+            <element signature="e#843#877#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/reader_impl.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-111">
+          <caret line="42" column="52" lean-forward="false" selection-start-line="42" selection-start-column="52" selection-end-line="42" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/reader_impl.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="161" column="74" lean-forward="false" selection-start-line="161" selection-start-column="74" selection-end-line="161" selection-end-column="74" />
+          <folding>
+            <element signature="e#815#834#0" expanded="true" />
+            <element signature="e#843#877#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/rfid/global_vars.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1206">
+          <caret line="71" column="26" lean-forward="false" selection-start-line="71" selection-start-column="26" selection-end-line="71" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

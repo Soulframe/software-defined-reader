@@ -25,36 +25,52 @@
 #include <vector>
 #include <queue>
 #include <fstream>
+
 namespace gr {
-  namespace rfid {
+    namespace rfid {
 
-    class reader_impl : public reader
-    {
-     private:
-      int s_rate, d_rate,  n_cwquery_s,  n_cwack_s,n_p_down_s;
-      float sample_d, n_data0_s, n_data1_s, n_cw_s, n_pw_s, n_delim_s, n_trcal_s;
-      std::vector<float> data_0, data_1, cw, cw_ack, cw_query, delim, frame_sync, preamble, rtcal, trcal, query_bits, ack_bits, query_rep,nak, query_adjust_bits,p_down;
-      int q_change; // 0-> increment, 1-> unchanged, 2-> decrement
-      void gen_query_adjust_bits();
-      void crc_append(std::vector<float> & q);
-      void gen_query_bits();
-      void gen_ack_bits(const float * in);
+        class reader_impl : public reader {
+        private:
+            int s_rate, d_rate, n_cwquery_s, n_cwack_s, n_p_down_s;
+            float sample_d, n_data0_s, n_data1_s, n_cw_s, n_pw_s, n_delim_s, n_trcal_s;
+            std::vector<float> data_0, data_1, cw, cw_ack, cw_query, delim, frame_sync, preamble, rtcal, trcal, query_bits, ack_bits, query_rep, nak, query_adjust_bits, p_down;
+            int q_change; // 0-> increment, 1-> unchanged, 2-> decrement
+            void gen_query_adjust_bits();
 
-    public:
-      void print_results();
-      reader_impl(int sample_rate, int dac_rate);
-      ~reader_impl();
+            void crc_append(std::vector<float> &q);
 
+            uint16_t crc16_append(std::vector<uint8_t> &q);
+            uint8_t bin2uint8(std::vector<int> vec);
+            std::vector<uint8_t> bin2uint8v (std::vector<float> &q);
+            void gen_query_bits();
 
-      void forecast (int noutput_items, gr_vector_int &ninput_items_required);
+            void gen_ack_bits(const float *in);
 
-      int general_work(int noutput_items,
-           gr_vector_int &ninput_items,
-           gr_vector_const_void_star &input_items,
-           gr_vector_void_star &output_items);
-    };
+            std::vector<float> select_bits;
+            const int SELECT_CODE[4] = {1, 0, 1, 0};
+            const int SELECT_TARGET[3] = {1, 0, 0};
+            const int SELECT_ACTION[3] = {0, 0, 0};
+            const int SELECT_MEMBANK[2] = {0, 1};
+            const int SELECT_POINTER[8] = {0, 0, 1, 0, 0, 0, 0, 0};
+            const int SELECT_LENGTH[8] = {0, 0, 0, 0, 0, 0, 1, 0};
+            const int SELECT_MASK[2] = {1, 1};
+            const int SELECT_TRUNCATE[1] = {1};
+        public:
+            void print_results();
 
-  } // namespace rfid
+            reader_impl(int sample_rate, int dac_rate);
+
+            ~reader_impl();
+
+            void forecast(int noutput_items, gr_vector_int &ninput_items_required);
+
+            int general_work(int noutput_items,
+                             gr_vector_int &ninput_items,
+                             gr_vector_const_void_star &input_items,
+                             gr_vector_void_star &output_items);
+        };
+
+    } // namespace rfid
 } // namespace gr
 
 #endif /* INCLUDED_RFID_READER_IMPL_H */

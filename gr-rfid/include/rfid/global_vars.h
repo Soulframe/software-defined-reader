@@ -29,7 +29,7 @@ namespace gr {
   namespace rfid {
 
     enum STATUS               {RUNNING, TERMINATED};
-    enum GEN2_LOGIC_STATUS  {SEND_QUERY, SEND_ACK, SEND_QUERY_REP, IDLE, SEND_CW, START, SEND_QUERY_ADJUST, SEND_NAK_QR, SEND_NAK_Q, POWER_DOWN}; 
+    enum GEN2_LOGIC_STATUS  {SEND_SELECT, SEND_QUERY, SEND_ACK, SEND_QUERY_REP, IDLE, SEND_CW, START, SEND_QUERY_ADJUST, SEND_NAK_QR, SEND_NAK_Q, POWER_DOWN};
     enum GATE_STATUS        {GATE_OPEN, GATE_CLOSED, GATE_SEEK_RN16, GATE_SEEK_EPC};  
     enum DECODER_STATUS     {DECODER_DECODE_RN16, DECODER_DECODE_EPC};
     
@@ -69,7 +69,7 @@ namespace gr {
     // CONSTANTS (READER CONFIGURATION)
 
     // Fixed number of slots (2^(FIXED_Q))  
-    const int FIXED_Q              = 0;
+    const int FIXED_Q  = 6;
 
     // Termination criteria
     // const int MAX_INVENTORY_ROUND = 50;

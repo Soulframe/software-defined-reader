@@ -1,5 +1,3 @@
-#Developed by: Nikos Kargas 
-
 from gnuradio import gr
 from gnuradio import uhd
 from gnuradio import blocks
@@ -8,10 +6,22 @@ from gnuradio import analog
 from gnuradio import digital
 from gnuradio import qtgui
 import rfid
-
+from PyQt4 import Qt
+from gnuradio import analog
+from gnuradio import blocks
+from gnuradio import eng_notation
+from gnuradio import filter
+from gnuradio import gr
+from gnuradio import qtgui
+from gnuradio.eng_option import eng_option
+from gnuradio.filter import firdes
+from optparse import OptionParser
+import sip
+import sys
+from gnuradio import qtgui
 DEBUG = False
 
-class reader_top_block(gr.top_block):
+class reader_top_block(gr.top_block, Qt.QWidget):
 
   # Configure usrp source
   def u_source(self):
@@ -26,7 +36,7 @@ class reader_top_block(gr.top_block):
     self.source.set_center_freq(self.freq, 0)
     self.source.set_gain(self.rx_gain, 0)
     self.source.set_antenna("RX2", 0)
-    #self.source.set_auto_dc_offset(False) # Uncomment this line for SBX daughterboard
+    self.source.set_auto_dc_offset(False) # Uncomment this line for SBX daughterboard
 
   # Configure usrp sink
   def u_sink(self):
@@ -41,21 +51,21 @@ class reader_top_block(gr.top_block):
     self.sink.set_center_freq(self.freq, 0)
     self.sink.set_gain(self.tx_gain, 0)
     self.sink.set_antenna("TX/RX", 0)
-    
+
   def __init__(self):
     gr.top_block.__init__(self)
 
 
-    #rt = gr.enable_realtime_scheduling() 
+    #rt = gr.enable_realtime_scheduling()
 
     ######## Variables #########
-    self.dac_rate = 1e6                 # DAC rate 
+    self.dac_rate = 1e6                 # DAC rate
     self.adc_rate = 100e6/50            # ADC rate (2MS/s complex samples)
     self.decim     = 5                    # Decimation (downsampling factor)
-    self.ampl     = 0.1                  # Output signal amplitude (signal power vary for different RFX900 cards)
-    self.freq     = 910e6                # Modulation frequency (can be set between 902-920)
+    self.ampl     = 0.75                  # Output signal amplitude (signal power vary for different RFX900 cards)
+    self.freq     = 915e6                # Modulation frequency (can be set between 902-920)
     self.rx_gain   = 20                   # RX Gain (gain at receiver)
-    self.tx_gain   = 0                    # RFX900 no Tx gain option
+    self.tx_gain   = 20                    # RFX900 no Tx gain option
 
     self.usrp_address_source = "addr=192.168.10.2,recv_frame_size=256"
     self.usrp_address_sink   = "addr=192.168.10.2,recv_frame_size=256"
@@ -86,7 +96,7 @@ class reader_top_block(gr.top_block):
       self.u_sink()
 
       ######## Connections #########
-      self.connect(self.source,  self.matched_filter)
+      self.connect(self.source, self.matched_filter)
       self.connect(self.matched_filter, self.gate)
 
       self.connect(self.gate, self.tag_decoder)
@@ -95,14 +105,22 @@ class reader_top_block(gr.top_block):
       self.connect(self.amp, self.to_complex)
       self.connect(self.to_complex, self.sink)
 
+      #self.scope = scopesink2.scope_sink_c(panel,sample_rate=2e6);
+      self.scope = qtgui.time_sink_f(
+        	1024, #size
+        	2e6, #samp_rate
+        	"", #name
+        	1 #number of inputs
+        )
+      self.connect((self.tag_decoder,0),(self.scope,0))
       #File sinks for logging (Remove comments to log data)
       #self.connect(self.source, self.file_sink_source)
 
     else :  # Offline Data
       self.file_source               = blocks.file_source(gr.sizeof_gr_complex*1, "../misc/data/file_source_test",False)   ## instead of uhd.usrp_source
       self.file_sink                  = blocks.file_sink(gr.sizeof_gr_complex*1,   "../misc/data/file_sink", False)     ## instead of uhd.usrp_sink
- 
-      ######## Connections ######### 
+
+      ######## Connections #########
       self.connect(self.file_source, self.matched_filter)
       self.connect(self.matched_filter, self.gate)
       self.connect(self.gate, self.tag_decoder)
@@ -110,8 +128,8 @@ class reader_top_block(gr.top_block):
       self.connect(self.reader, self.amp)
       self.connect(self.amp, self.to_complex)
       self.connect(self.to_complex, self.file_sink)
-    
-    #File sinks for logging 
+
+    #File sinks for logging
     #self.connect(self.gate, self.file_sink_gate)
     self.connect((self.tag_decoder,1), self.file_sink_decoder) # (Do not comment this line)
     #self.connect(self.file_sink_reader, self.file_sink_reader)
