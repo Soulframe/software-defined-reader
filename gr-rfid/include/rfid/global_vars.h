@@ -114,7 +114,7 @@ namespace gr {
     // Query command 
     const int QUERY_CODE[4] = {1,0,0,0};
     const int M[2]          = {0,0};
-    const int SEL[2]         = {0,0};
+    const int SEL[2]         = {1,0};
     const int SESSION[2]     = {0,0};
     const int TARGET         = 0;
     const int TREXT         = 0;

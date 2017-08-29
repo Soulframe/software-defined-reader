@@ -138,14 +138,7 @@ namespace gr {
             select_bits.insert(select_bits.end(),&SELECT_LENGTH[0],&SELECT_LENGTH[8]);
             select_bits.insert(select_bits.end(),&SELECT_MASK[0],&SELECT_MASK[2]);
             select_bits.insert(select_bits.end(),&SELECT_TRUNCATE[0],&SELECT_TRUNCATE[1]);
-            std::vector<uint8_t> out = bin2uint8v(select_bits);
-            uint16_t crc16 = crc16_append(out);
-            std::vector<float> crc16v;
-            for(int i=0;i<16;i++){
-                crc16v.insert(crc16v.begin(),crc16%2);
-                crc16 = crc16/2;
-            }
-            select_bits.insert(select_bits.end(),crc16v.begin(),crc16v.end());
+            crc16_append_rfid(select_bits);
             for(std::vector<float>::iterator iter=select_bits.begin();iter!=select_bits.end();++iter)
             {
                 std::cout<<*iter;
@@ -274,7 +267,7 @@ namespace gr {
                             written += data_0.size();
                         }
                     }
-                    // Send CW for RN16
+                    // Send CW
                     memcpy(&out[written], &cw_query[0], sizeof(float) * cw_query.size());
                     written += cw_query.size();
                     std::cout<<"select send"<<std::endl;
@@ -402,54 +395,6 @@ namespace gr {
             return written;
         }
 
-        // crc16 for select
-        uint8_t reader_impl::bin2uint8(std::vector<int> vec)
-        {
-            //int num;
-            std::vector<int>::iterator iter;
-            uint8_t sum=0, a;
-            for(iter=vec.end(), a=0; iter!=vec.begin(); iter--, a++)
-            {
-                sum = sum + (*(iter-1))*pow(2.0, a);
-            }
-            return sum;
-        }
-
-        std::vector<uint8_t> reader_impl::bin2uint8v (std::vector<float> &q) {
-            int len = q.size()/8+1;
-            std::vector<uint8_t> uint8o;
-            std::vector<float>::iterator iter = q.end();
-            iter--;
-            for(int i =0;i<len;i++){
-                std::vector<int> temp;
-                for(int j=0;j<8;j++){
-                    temp.insert(temp.begin(),(int)(*iter));
-                    if(iter==q.begin()){
-                        break;
-                    }
-                    iter--;
-                }
-                uint8o.insert(uint8o.begin(),bin2uint8(temp));
-            }
-            return uint8o;
-        }
-        uint16_t reader_impl::crc16_append(std::vector<uint8_t> &q){
-            int8_t j;
-            uint16_t crc16 = 0x0000;			/* PRESET value */
-            for(std::vector<uint8_t>::iterator iter = q.begin();iter<q.end();iter++){
-                crc16 ^= *iter;
-                for (j = 0; j < 8; j+=1) {		/* test each bit in the bytes */
-                    if (crc16 & 0x0001) {
-                        crc16 = crc16 >> 1;
-                        crc16 ^= 0x8408; 			/* POLYNOMIAL x^16 + x^12 + x^5 + 1 */
-                    }
-                    else {
-                        crc16 = crc16 >> 1;
-                    }
-                }
-            }
-            return crc16;
-        }
         /* Function adapted from https://www.cgran.org/wiki/Gen2 */
         void reader_impl::crc_append(std::vector<float> &q) {
             int crc[] = {1, 0, 0, 1, 0};
@@ -495,5 +440,72 @@ namespace gr {
             for (int i = 4; i >= 0; i--)
                 q.push_back(crc[i]);
         }
+        // CRC16
+        uint8_t reader_impl::bin2uint8(std::vector<int> vec)
+        {
+            std::vector<int>::iterator iter;
+            uint8_t sum=0, a;
+            for(iter=vec.end(), a=0; iter!=vec.begin(); iter--, a++)
+            {
+                sum = sum + (*(iter-1))*pow(2.0, a);
+            }
+            return sum;
+        }
+        std::vector<uint8_t> reader_impl::bin2uint8vector (std::vector<float> q) {
+            //length
+            int len = q.size()/8;
+            if(q.size()%8!=0)
+                len = len+1;
+            std::vector<uint8_t> uint8o;
+            std::vector<float>::iterator iter = q.end();
+            iter--;
+            for(int i =0;i<len;i++){
+                std::vector<int> temp;
+                temp.resize(0);
+                for(int j=0;j<8;j++){
+                    temp.insert(temp.begin(),(int)(*iter));
+                    if(iter==q.begin()){
+                        break;
+                    }
+                    iter--;
+                }
+                uint8o.insert(uint8o.begin(),bin2uint8(temp));
+            }
+            return uint8o;
+        }
+        uint16_t reader_impl::crc16ccitt_rfid(std::vector<uint8_t> input) {
+            uint16_t remainder =  0xffff;
+            uint16_t polynomial = 0x1021;
+            for (int byte = 0; byte < input.size(); ++byte) {
+                remainder ^= (input[byte] << 8);
+                for (uint8_t bit = 8; bit > 0; --bit) {
+                    if (remainder & 0x8000) {
+                        remainder = (remainder << 1) ^ polynomial;
+                    } else {
+                        remainder = (remainder << 1);
+                    }
+                }
+            }
+            return 0xFFFF-remainder;
+        }
+        void reader_impl::crc16_append_rfid(std::vector<float> &rfid_input){
+            std::vector<uint8_t>uint8_rfid = bin2uint8vector(rfid_input);
+            uint16_t output = crc16ccitt_rfid(uint8_rfid);
+            std::vector<float>crc16;
+            for(int i=0;i<16;i++){
+                if(output%2==1){
+                    crc16.insert(crc16.end(),1);
+                }else{
+                    crc16.insert(crc16.end(),0);
+                }
+                output = output/2;
+            }
+            std::vector<float>::iterator iter = crc16.end();
+            iter--;
+            for(;iter>=crc16.begin();iter--){
+                rfid_input.insert(rfid_input.end(),*iter);
+            }
+        }
+
     } /* namespace rfid */
 } /* namespace gr */
