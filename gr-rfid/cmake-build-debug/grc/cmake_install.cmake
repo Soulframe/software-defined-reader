@@ -1,4 +1,4 @@
-# Install script for directory: /home/anplus/Documents/Selected/gr-rfid/grc
+# Install script for directory: /home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/grc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,10 +34,10 @@ endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gnuradio/grc/blocks" TYPE FILE FILES
-    "/home/anplus/Documents/Selected/gr-rfid/grc/rfid_global_vars.xml"
-    "/home/anplus/Documents/Selected/gr-rfid/grc/rfid_gate.xml"
-    "/home/anplus/Documents/Selected/gr-rfid/grc/rfid_reader.xml"
-    "/home/anplus/Documents/Selected/gr-rfid/grc/rfid_tag_decoder.xml"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/grc/rfid_global_vars.xml"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/grc/rfid_gate.xml"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/grc/rfid_reader.xml"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/grc/rfid_tag_decoder.xml"
     )
 endif()
 

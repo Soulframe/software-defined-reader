@@ -1,4 +1,4 @@
-# Install script for directory: /home/anplus/Documents/Selected/gr-rfid/docs/doxygen
+# Install script for directory: /home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/docs/doxygen
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,8 +34,8 @@ endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/doc/gr-rfid" TYPE DIRECTORY FILES
-    "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/docs/doxygen/xml"
-    "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/docs/doxygen/html"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/docs/doxygen/xml"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/docs/doxygen/html"
     )
 endif()
 

@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -fvisibility=hidden
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/anplus/Documents/Selected/gr-rfid/lib -I/home/anplus/Documents/Selected/gr-rfid/include -I/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/lib -I/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/include -I/usr/local/include -I/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/swig -I/home/anplus/Documents/Selected/gr-rfid/swig -I/usr/local/include/gnuradio/swig -I/usr/include/python2.7 
+CXX_INCLUDES = -I/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/lib -I/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/include -I/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/lib -I/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/include -I/usr/local/include -I/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/swig -I/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/swig -I/usr/local/include/gnuradio/swig -I/usr/include/python2.7 
 

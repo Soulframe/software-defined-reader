@@ -1,4 +1,4 @@
-# Install script for directory: /home/anplus/Documents/Selected/gr-rfid/include/rfid
+# Install script for directory: /home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/include/rfid
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,11 +34,11 @@ endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/rfid" TYPE FILE FILES
-    "/home/anplus/Documents/Selected/gr-rfid/include/rfid/api.h"
-    "/home/anplus/Documents/Selected/gr-rfid/include/rfid/gate.h"
-    "/home/anplus/Documents/Selected/gr-rfid/include/rfid/global_vars.h"
-    "/home/anplus/Documents/Selected/gr-rfid/include/rfid/reader.h"
-    "/home/anplus/Documents/Selected/gr-rfid/include/rfid/tag_decoder.h"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/include/rfid/api.h"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/include/rfid/gate.h"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/include/rfid/global_vars.h"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/include/rfid/reader.h"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/include/rfid/tag_decoder.h"
     )
 endif()
 

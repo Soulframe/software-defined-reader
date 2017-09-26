@@ -1,4 +1,4 @@
-/home/anplus/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/172.3544.40/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/anplus/Documents/Selected/gr-rfid
+/home/zhenlin/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/172.3968.17/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid
 -- The CXX compiler identification is GNU 5.4.0
 -- The C compiler identification is GNU 5.4.0
 -- Check for working CXX compiler: /usr/bin/c++
@@ -57,6 +57,21 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Found PythonInterp: /usr/bin/python2 (found suitable version "2.7.12", minimum required is "2") 
 -- Performing Test HAVE_WNO_UNUSED_BUT_SET_VARIABLE
 -- Performing Test HAVE_WNO_UNUSED_BUT_SET_VARIABLE - Success
+CMake Warning (dev) at CMakeLists.txt:153 (add_subdirectory):
+  The source directory
+
+    /home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/apps
+
+  does not contain a CMakeLists.txt file.
+
+  CMake does not support this case but it used to work accidentally and is
+  being allowed for compatibility.
+
+  Policy CMP0014 is not set: Input directories must have CMakeLists.txt.  Run
+  "cmake --help-policy CMP0014" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/anplus/Documents/Selected/gr-rfid/cmake-build-debug
+-- Build files have been written to: /home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug

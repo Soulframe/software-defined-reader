@@ -1,4 +1,4 @@
-# Install script for directory: /home/anplus/Documents/Selected/gr-rfid
+# Install script for directory: /home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,18 +33,18 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/rfid" TYPE FILE FILES "/home/anplus/Documents/Selected/gr-rfid/cmake/Modules/rfidConfig.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/rfid" TYPE FILE FILES "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake/Modules/rfidConfig.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/include/rfid/cmake_install.cmake")
-  include("/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/lib/cmake_install.cmake")
-  include("/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/swig/cmake_install.cmake")
-  include("/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/python/cmake_install.cmake")
-  include("/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/grc/cmake_install.cmake")
-  include("/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/apps/cmake_install.cmake")
-  include("/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/docs/cmake_install.cmake")
+  include("/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/include/rfid/cmake_install.cmake")
+  include("/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/lib/cmake_install.cmake")
+  include("/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/swig/cmake_install.cmake")
+  include("/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/python/cmake_install.cmake")
+  include("/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/grc/cmake_install.cmake")
+  include("/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/apps/cmake_install.cmake")
+  include("/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/docs/cmake_install.cmake")
 
 endif()
 
@@ -56,5 +56,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

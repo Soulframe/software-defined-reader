@@ -1,4 +1,4 @@
-# Install script for directory: /home/anplus/Documents/Selected/gr-rfid/swig
+# Install script for directory: /home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/swig
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,12 +39,12 @@ if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMP
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid/_rfid_swig.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid" TYPE MODULE FILES "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/swig/_rfid_swig.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid" TYPE MODULE FILES "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/swig/_rfid_swig.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid/_rfid_swig.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid/_rfid_swig.so")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid/_rfid_swig.so"
-         OLD_RPATH "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/lib:/usr/local/lib:"
+         OLD_RPATH "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/lib:/usr/local/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid/_rfid_swig.so")
@@ -53,20 +53,20 @@ if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMP
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid" TYPE FILE FILES "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/swig/rfid_swig.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid" TYPE FILE FILES "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/swig/rfid_swig.py")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages/rfid" TYPE FILE FILES
-    "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/swig/rfid_swig.pyc"
-    "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/swig/rfid_swig.pyo"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/swig/rfid_swig.pyc"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/swig/rfid_swig.pyo"
     )
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/rfid/rfid/swig" TYPE FILE FILES
-    "/home/anplus/Documents/Selected/gr-rfid/swig/rfid_swig.i"
-    "/home/anplus/Documents/Selected/gr-rfid/cmake-build-debug/swig/rfid_swig_doc.i"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/swig/rfid_swig.i"
+    "/home/zhenlin/Documents/RFID/BasicMoudle/Selected/gr-rfid/cmake-build-debug/swig/rfid_swig_doc.i"
     )
 endif()
 

@@ -21,7 +21,10 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
+#include <jsoncpp/json/json.h>
+#include <fstream>
+#include <iostream>
+#include <fstream>
 #include <gnuradio/io_signature.h>
 #include "reader_impl.h"
 #include "rfid/global_vars.h"
@@ -70,7 +73,7 @@ namespace gr {
                         sample_d;    //EPC   if it is longer than nominal it wont cause tags to change inventoried flag
             n_p_down_s = (P_DOWN_D) / sample_d;
 
-            p_down.resize(n_p_down_s);        // Power down samples
+            p_down.resize(n_p_down_s);         // Power down samples
             cw_query.resize(n_cwquery_s);      // Sent after query/query rep
             cw_ack.resize(n_cwack_s);          // Sent after ack
 
@@ -124,28 +127,27 @@ namespace gr {
             nak.insert(nak.end(), data_0.begin(), data_0.end());
             nak.insert(nak.end(), data_0.begin(), data_0.end());
 
+            // T4
+            wait_T4.resize(200);
+            std::fill_n(wait_T4.begin(),wait_T4.size(),1);
             gen_query_bits();
             gen_query_adjust_bits();
+            setting();
         }
 
         void reader_impl::gen_query_bits() {
-            select_bits.resize(0);
-            select_bits.insert(select_bits.end(),&SELECT_CODE[0],&SELECT_CODE[4]);
-            select_bits.insert(select_bits.end(),&SELECT_TARGET[0],&SELECT_TARGET[3]);
-            select_bits.insert(select_bits.end(),&SELECT_ACTION[0],&SELECT_ACTION[3]);
-            select_bits.insert(select_bits.end(),&SELECT_MEMBANK[0],&SELECT_MEMBANK[2]);
-            select_bits.insert(select_bits.end(),&SELECT_POINTER[0],&SELECT_POINTER[8]);
-            select_bits.insert(select_bits.end(),&SELECT_LENGTH[0],&SELECT_LENGTH[8]);
-            select_bits.insert(select_bits.end(),&SELECT_MASK[0],&SELECT_MASK[2]);
-            select_bits.insert(select_bits.end(),&SELECT_TRUNCATE[0],&SELECT_TRUNCATE[1]);
-            crc16_append_rfid(select_bits);
-            for(std::vector<float>::iterator iter=select_bits.begin();iter!=select_bits.end();++iter)
-            {
-                std::cout<<*iter;
-            }
-            std::cout<<std::endl;
-            int num_ones = 0, num_zeros = 0;
-
+            /*
+            select_bit.resize(0);
+            select_bit.insert(select_bit.end(),&SELECT_CODE[0],&SELECT_CODE[4]);
+            select_bit.insert(select_bit.end(),&SELECT_TARGET[0],&SELECT_TARGET[3]);
+            select_bit.insert(select_bit.end(),&SELECT_ACTION[0],&SELECT_ACTION[3]);
+            select_bit.insert(select_bit.end(),&SELECT_MEMBANK[0],&SELECT_MEMBANK[2]);
+            select_bit.insert(select_bit.end(),&SELECT_POINTER[0],&SELECT_POINTER[8]);
+            select_bit.insert(select_bit.end(),&SELECT_LENGTH[0],&SELECT_LENGTH[8]);
+            select_bit.insert(select_bit.end(),&SELECT_MASK[0],&SELECT_MASK[3]);
+            select_bit.insert(select_bit.end(),&SELECT_TRUNCATE[0],&SELECT_TRUNCATE[1]);
+            crc16_append(select_bit);
+            */
             query_bits.resize(0);
             query_bits.insert(query_bits.end(), &QUERY_CODE[0], &QUERY_CODE[4]);
             query_bits.push_back(DR);
@@ -224,17 +226,11 @@ namespace gr {
             switch (reader_state->gen2_logic_status) {
                 case START:
                     GR_LOG_INFO(d_debug_logger, "START");
-
+                    std::cout<<"START"<<std::endl;
+                    // send a long "1"
                     memcpy(&out[written], &cw_ack[0], sizeof(float) * cw_ack.size());
                     written += cw_ack.size();
                     reader_state->gen2_logic_status = SEND_SELECT;
-                    break;
-
-                case POWER_DOWN:
-                    GR_LOG_INFO(d_debug_logger, "POWER DOWN");
-                    memcpy(&out[written], &p_down[0], sizeof(float) * p_down.size());
-                    written += p_down.size();
-                    reader_state->gen2_logic_status = START;
                     break;
 
                 case SEND_NAK_QR:
@@ -252,25 +248,28 @@ namespace gr {
                     written += nak.size();
                     memcpy(&out[written], &cw[0], sizeof(float) * cw.size());
                     written += cw.size();
-                    reader_state->gen2_logic_status = SEND_QUERY;
+                    reader_state->gen2_logic_status = SEND_SELECT;
                     break;
                 case SEND_SELECT:
-                    // Send FrameSync
-                    memcpy(&out[written], &frame_sync[0], sizeof(float) * frame_sync.size());
-                    written += frame_sync.size();
-                    for (int i = 0; i < select_bits.size(); i++) {
-                        if (select_bits[i] == 1) {
-                            memcpy(&out[written], &data_1[0], sizeof(float) * data_1.size());
-                            written += data_1.size();
-                        } else {
-                            memcpy(&out[written], &data_0[0], sizeof(float) * data_0.size());
-                            written += data_0.size();
+                    for(int i=0;i<select_output.size();i++){
+                        // Send FrameSync
+                        memcpy(&out[written], &frame_sync[0], sizeof(float) * frame_sync.size());
+                        written += frame_sync.size();
+                        // Send Command
+                        for (int i = 0; i < select_output[i].size(); i++) {
+                            if (select_output[i][i] == 1) {
+                                memcpy(&out[written], &data_1[0], sizeof(float) * data_1.size());
+                                written += data_1.size();
+                            } else {
+                                memcpy(&out[written], &data_0[0], sizeof(float) * data_0.size());
+                                written += data_0.size();
+                            }
                         }
+                        // wait
+                        memcpy(&out[written], &wait_T4[0], sizeof(float) * wait_T4.size());
+                        written += wait_T4.size();
+                        std::cout<<"select send"<<std::endl;
                     }
-                    // Send CW
-                    memcpy(&out[written], &cw_query[0], sizeof(float) * cw_query.size());
-                    written += cw_query.size();
-                    std::cout<<"select send"<<std::endl;
                     reader_state->gen2_logic_status = SEND_QUERY;
                     break;
                 case SEND_QUERY:
@@ -284,15 +283,12 @@ namespace gr {
                     GR_LOG_INFO(d_debug_logger, "INVENTORY ROUND : " << reader_state->reader_stats.cur_inventory_round
                                                                      << " SLOT NUMBER : "
                                                                      << reader_state->reader_stats.cur_slot_number);
-
                     reader_state->reader_stats.n_queries_sent += 1;
                     // Controls the other two blocks
                     reader_state->decoder_status = DECODER_DECODE_RN16;
                     reader_state->gate_status = GATE_SEEK_RN16;
-
                     memcpy(&out[written], &preamble[0], sizeof(float) * preamble.size());
                     written += preamble.size();
-
                     for (int i = 0; i < query_bits.size(); i++) {
                         if (query_bits[i] == 1) {
                             memcpy(&out[written], &data_1[0], sizeof(float) * data_1.size());
@@ -305,7 +301,6 @@ namespace gr {
                     // Send CW for RN16
                     memcpy(&out[written], &cw_query[0], sizeof(float) * cw_query.size());
                     written += cw_query.size();
-
                     // Return to IDLE
                     reader_state->gen2_logic_status = IDLE;
                     break;
@@ -316,9 +311,7 @@ namespace gr {
                         // Controls the other two blocks
                         reader_state->decoder_status = DECODER_DECODE_EPC;
                         reader_state->gate_status = GATE_SEEK_EPC;
-
                         gen_ack_bits(in);
-
                         // Send FrameSync
                         memcpy(&out[written], &frame_sync[0], sizeof(float) * frame_sync.size());
                         written += frame_sync.size();
@@ -363,30 +356,6 @@ namespace gr {
                     reader_state->gen2_logic_status = IDLE;    // Return to IDLE
                     break;
 
-                case SEND_QUERY_ADJUST:
-                    GR_LOG_INFO(d_debug_logger, "SEND QUERY_ADJUST");
-                    // Controls the other two blocks
-                    reader_state->decoder_status = DECODER_DECODE_RN16;
-                    reader_state->gate_status = GATE_SEEK_RN16;
-                    reader_state->reader_stats.n_queries_sent += 1;
-
-                    memcpy(&out[written], &frame_sync[0], sizeof(float) * frame_sync.size());
-                    written += frame_sync.size();
-
-                    for (int i = 0; i < query_adjust_bits.size(); i++) {
-                        if (query_adjust_bits[i] == 1) {
-                            memcpy(&out[written], &data_1[0], sizeof(float) * data_1.size());
-                            written += data_1.size();
-                        } else {
-                            memcpy(&out[written], &data_0[0], sizeof(float) * data_0.size());
-                            written += data_0.size();
-                        }
-                    }
-                    memcpy(&out[written], &cw_query[0], sizeof(float) * cw_query.size());
-                    written += cw_query.size();
-                    reader_state->gen2_logic_status = IDLE;    // Return to IDLE
-                    break;
-
                 default:
                     // IDLE
                     break;
@@ -394,7 +363,57 @@ namespace gr {
             consume_each(consumed);
             return written;
         }
-
+        /*setting from json*/
+        void reader_impl::setting() {
+            std::ifstream ifs("../rfid-setting.json");
+            if (ifs.is_open()) {
+                std::cout << "get setting file" << std::endl;
+            } else {
+                std::cout << "fail to get setting file" << std::endl;
+            }
+            Json::Reader reader;
+            Json::Value root;
+            reader.parse(ifs, root); // Reader can also read strings
+            // decoding
+            std::cout << root["Select"].toStyledString();
+            for (int i = 0; i < root["Select"].size(); i++) {
+                select_command select_input;
+                for (int j = 0; j < root["Select"][i]["ACTION"].size(); j++) {
+                    select_input.SELECT_ACTION[j] = root["Select"][i]["ACTION"][j].asInt();
+                }
+                for (int j = 0; j < root["Select"][i]["MEMBANK"].size(); j++) {
+                    select_input.SELECT_MEMBANK[j] = root["Select"][i]["MEMBANK"][j].asInt();
+                }
+                for (int j = 0; j < root["Select"][i]["POINTER"].size(); j++) {
+                    select_input.SELECT_POINTER[j] = root["Select"][i]["POINTER"][j].asInt();
+                }
+                for (int j = 0; j < root["Select"][i]["LENGTH"].size(); j++) {
+                    select_input.SELECT_LENGTH[j] = root["Select"][i]["LENGTH"][j].asInt();
+                }
+                for (int j = 0; j < root["Select"][i]["TRUNCATE"].size(); j++) {
+                    select_input.SELECT_TRUNCATE[j] = root["Select"][i]["TRUNCATE"][j].asInt();
+                }
+                for (int j = 0; j < root["Select"][i]["MASK"].size(); j++) {
+                    select_input.SELECT_MASK.push_back(root["Select"][i]["MASK"][j].asInt());
+                }
+                select_input_all.push_back(select_input);
+            }
+            std::cout << select_input_all.size();
+            std::vector<float>temp;
+            for(int i=0;i<select_input_all.size();i++){
+                temp.resize(0);
+                temp.insert(temp.end(),&SELECT_CODE[0],&SELECT_CODE[4]);
+                temp.insert(temp.end(),&SELECT_TARGET[0],&SELECT_TARGET[3]);
+                temp.insert(temp.end(),&select_input_all[i].SELECT_ACTION[0],&select_input_all[i].SELECT_ACTION[3]);
+                temp.insert(temp.end(),&select_input_all[i].SELECT_MEMBANK[0],&select_input_all[i].SELECT_MEMBANK[2]);
+                temp.insert(temp.end(),&select_input_all[i].SELECT_POINTER[0],&select_input_all[i].SELECT_POINTER[8]);
+                temp.insert(temp.end(),&select_input_all[i].SELECT_LENGTH[0],&select_input_all[i].SELECT_LENGTH[8]);
+                temp.insert(temp.end(),&select_input_all[i].SELECT_MASK[0],&select_input_all[i].SELECT_MASK[select_input_all[i].SELECT_MASK.size()]);
+                temp.insert(temp.end(),&select_input_all[i].SELECT_TRUNCATE[0],&select_input_all[i].SELECT_TRUNCATE[1]);
+                crc16_append(temp);
+                select_output.push_back(temp);
+            }
+        }
         /* Function adapted from https://www.cgran.org/wiki/Gen2 */
         void reader_impl::crc_append(std::vector<float> &q) {
             int crc[] = {1, 0, 0, 1, 0};
@@ -441,71 +460,69 @@ namespace gr {
                 q.push_back(crc[i]);
         }
         // CRC16
-        uint8_t reader_impl::bin2uint8(std::vector<int> vec)
-        {
-            std::vector<int>::iterator iter;
-            uint8_t sum=0, a;
-            for(iter=vec.end(), a=0; iter!=vec.begin(); iter--, a++)
-            {
-                sum = sum + (*(iter-1))*pow(2.0, a);
-            }
-            return sum;
-        }
-        std::vector<uint8_t> reader_impl::bin2uint8vector (std::vector<float> q) {
-            //length
-            int len = q.size()/8;
-            if(q.size()%8!=0)
-                len = len+1;
-            std::vector<uint8_t> uint8o;
-            std::vector<float>::iterator iter = q.end();
-            iter--;
-            for(int i =0;i<len;i++){
-                std::vector<int> temp;
-                temp.resize(0);
-                for(int j=0;j<8;j++){
-                    temp.insert(temp.begin(),(int)(*iter));
-                    if(iter==q.begin()){
-                        break;
+        void reader_impl::crc16_append(std::vector<float> &q) {
+            float crc[] = {1, 1, 1, 1,
+                           1, 1, 1, 1,
+                           1, 1, 1, 1,
+                           1, 1, 1, 1};
+            for (int i = 0; i < q.size(); i++) {
+                float tmp[] = {0, 0, 0, 0,
+                               0, 0, 0, 0,
+                               0, 0, 0, 0,
+                               0, 0, 0, 0};
+                tmp[15] = crc[14];
+                tmp[1] = crc[0];
+                tmp[2] = crc[1];
+                tmp[3] = crc[2];
+                tmp[4] = crc[3];
+                tmp[6] = crc[5];
+                tmp[7] = crc[6];
+                tmp[8] = crc[7];
+                tmp[9] = crc[8];
+                tmp[10]= crc[9];
+                tmp[11]= crc[10];
+                tmp[13]= crc[12];
+                tmp[14]= crc[13];
+                if(crc[15] == q[i]){
+                    //1 - XOR ==
+                    tmp[0] = 0;
+                    if(crc[4] == 0){
+                        //2 - XOR ==
+                        tmp[5] = 0;
+                    }else{
+                        //2 - XOR !=
+                        tmp[5] = 1;
                     }
-                    iter--;
-                }
-                uint8o.insert(uint8o.begin(),bin2uint8(temp));
-            }
-            return uint8o;
-        }
-        uint16_t reader_impl::crc16ccitt_rfid(std::vector<uint8_t> input) {
-            uint16_t remainder =  0xffff;
-            uint16_t polynomial = 0x1021;
-            for (int byte = 0; byte < input.size(); ++byte) {
-                remainder ^= (input[byte] << 8);
-                for (uint8_t bit = 8; bit > 0; --bit) {
-                    if (remainder & 0x8000) {
-                        remainder = (remainder << 1) ^ polynomial;
-                    } else {
-                        remainder = (remainder << 1);
+                    if(crc[11] == 0){
+                        //3 - XOR ==
+                        tmp[12] = 0;
+                    }else{
+                        //3 - XOR !=
+                        tmp[12] = 1;
                     }
-                }
-            }
-            return 0xFFFF-remainder;
-        }
-        void reader_impl::crc16_append_rfid(std::vector<float> &rfid_input){
-            std::vector<uint8_t>uint8_rfid = bin2uint8vector(rfid_input);
-            uint16_t output = crc16ccitt_rfid(uint8_rfid);
-            std::vector<float>crc16;
-            for(int i=0;i<16;i++){
-                if(output%2==1){
-                    crc16.insert(crc16.end(),1);
                 }else{
-                    crc16.insert(crc16.end(),0);
+                    //1 - XOR !=
+                    tmp[0] = 1;
+                    if(crc[4] == 1){
+                        //2 - XOR ==
+                        tmp[5] = 0;
+                    }else{
+                        //2 - XOR !=
+                        tmp[5] = 1;
+                    }
+                    if(crc[11] == 1){
+                        //3 - XOR ==
+                        tmp[12] = 0;
+                    }else{
+                        //3 - XOR !=
+                        tmp[12] = 1;
+                    }
                 }
-                output = output/2;
+                memcpy(crc, tmp, 16 * sizeof(float));
             }
-            std::vector<float>::iterator iter = crc16.end();
-            iter--;
-            for(;iter>=crc16.begin();iter--){
-                rfid_input.insert(rfid_input.end(),*iter);
-            }
+            for (int i = 15; i >= 0; i--)
+                q.push_back(!crc[i]);
         }
 
-    } /* namespace rfid */
+    }/* namespace rfid */
 } /* namespace gr */

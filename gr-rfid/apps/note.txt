@@ -1,1 +1,0 @@
-sudo GR_SCHEDULER=STS nice -n -20 python ./reader.py

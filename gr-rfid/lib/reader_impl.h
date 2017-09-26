@@ -25,6 +25,7 @@
 #include <vector>
 #include <queue>
 #include <fstream>
+#include <jsoncpp/json/json.h>
 
 namespace gr {
     namespace rfid {
@@ -39,33 +40,41 @@ namespace gr {
             float sample_d, n_data0_s, n_data1_s, n_cw_s, n_pw_s, n_delim_s, n_trcal_s;
             std::vector<float> data_0, data_1, cw, cw_ack, cw_query, delim, frame_sync, preamble, rtcal, trcal, query_bits, ack_bits, query_rep, nak, query_adjust_bits, p_down;
             int q_change; // 0-> increment, 1-> unchanged, 2-> decrement
+            // Command Waiting Time
+            std::vector<float> wait_T4;
+
             void gen_query_adjust_bits();
 
             void crc_append(std::vector<float> &q);
-
+            void crc16_append(std::vector<float> &rfid_input);
             void gen_query_bits();
-
             void gen_ack_bits(const float *in);
 
+            //SELECT COMMAND
+            struct select_command{
+                int SELECT_ACTION[3];
+                int SELECT_MEMBANK[2];
+                int SELECT_POINTER[8];
+                int SELECT_LENGTH[8];
+                int SELECT_TRUNCATE[1];
+                std::vector<int> SELECT_MASK;
+            };
+            std::vector<select_command> select_input_all;
+            std::vector<std::vector<float>>select_output;
+            //TEST
             std::vector<float> select_bits;
             const int SELECT_CODE[4] = {1, 0, 1, 0};
             const int SELECT_TARGET[3] = {1, 0, 0};
             const int SELECT_ACTION[3] = {0, 0, 0};
             const int SELECT_MEMBANK[2] = {0, 1};
-            const int SELECT_POINTER[8] = {0, 1, 1, 1, 1, 1, 0, 1};
-            const int SELECT_LENGTH[8] = {0, 0, 0, 0, 0, 0, 1, 0};
-            const int SELECT_MASK[2] = {1, 0};
-            const int SELECT_TRUNCATE[1] = {0};
-
-            uint8_t bin2uint8(std::vector<int> vec);
-
-            std::vector<uint8_t> bin2uint8vector(std::vector<float> q);
-
-            uint16_t crc16ccitt_rfid(std::vector<uint8_t> input);
-
-            void crc16_append_rfid(std::vector<float> &rfid_input);
+            const int SELECT_POINTER[8] = {0, 0, 1, 0, 0, 0, 0, 0};
+            const int SELECT_LENGTH[8] = {0, 0, 0, 0, 0, 0, 1, 1};
+            const int SELECT_MASK[3] = {0, 0, 1};
+            const int SELECT_TRUNCATE[1] = {1};
+            void setting();
 
         public:
+
             void print_results();
 
             reader_impl(int sample_rate, int dac_rate);
