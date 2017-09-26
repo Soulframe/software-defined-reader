@@ -3,3 +3,9 @@ This is a Gen2 UHF RFID Reader, forked from https://github.com/nikosl21/Gen2-UHF
 
 This project is under development currently.
 
+Need JsonCPP library.
+
+```
+sudo apt-get install libjsoncpp-dev
+```
+
